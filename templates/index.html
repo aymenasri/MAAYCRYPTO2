@@ -1,481 +1,347 @@
 {% extends "base.html" %}
 {% block body %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAAY Crypto - Login</title>
-    <!-- Bootstrap CSS CDN (for tabs) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Google Fonts (Orbitron and Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Vanilla Tilt for 3D tilt effect -->
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+    <title>Login/Signup Form</title>
+    
     <style>
-        :root {
-            --primary-cyan: #00a3ff; /* New theme color */
-            --secondary-blue: #0066cc; /* Complementary darker blue */
-            --dark-bg: #0f172a; /* Background gradient start */
-            --card-bg: rgba(10, 10, 10, 0.95); /* Darker card background */
-            --neon-glow: 0 0 15px var(--primary-cyan), 0 0 30px rgba(0, 163, 255, 0.5);
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e3a8a 100%);
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            background: #f6f5f7;
+            font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Prevent scrolling */
-            font-family: 'Inter', sans-serif;
-            color: #ffffff;
+            margin: 0%;
+            padding: 10%;
         }
-
-        /* Crypto Particles */
-        .crypto-particles {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .crypto-particle {
-            position: absolute;
-            opacity: 0.4;
-            animation: float 12s infinite ease-in-out;
-            filter: drop-shadow(0 0 8px rgba(0, 163, 255, 0.6));
-            font-size: 1.5rem;
-            transition: transform 0.2s ease;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) scale(0.8) rotate(0deg);
-                opacity: 0;
-            }
-            20% { opacity: 0.5; }
-            80% { opacity: 0.5; }
-            100% {
-                transform: translateY(-100vh) scale(1.2) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        .btc-particle { color: #f7931a; }
-        .eth-particle { color: #627eea; }
-        .bnb-particle { color: #f3ba2f; }
-        .xrp-particle { color: #00a3ff; }
-        .ada-particle { color: #3468d1; }
-        .sol-particle { color: #66f9d1; }
-
-        /* Auth Card */
-        .auth-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(0, 163, 255, 0.3); /* #00a3ff border */
-            border-radius: 20px;
-            box-shadow: var(--neon-glow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, var(--primary-cyan), transparent);
-            animation: rotate 6s linear infinite;
-            opacity: 0.2;
-            z-index: -1;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Tab Buttons */
-        .nav-pills .nav-link {
-            color: #d1d5db;
-            background: none !important;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-            position: relative;
-        }
-
-        .nav-pills .nav-link:hover {
-            color: var(--primary-cyan);
-            text-shadow: var(--neon-glow);
-        }
-
-        .nav-pills .nav-link.active {
-            color: var(--primary-cyan);
-            background: none !important;
-            animation: neonPulse 1.5s infinite;
-        }
-
-        @keyframes neonPulse {
-            0%, 100% { text-shadow: var(--neon-glow); }
-            50% { text-shadow: 0 0 25px var(--primary-cyan); }
-        }
-
-        /* Form Elements */
-        .input-group {
-            position: relative;
-        }
-
-        .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white !important;
-            transition: all 0.3s ease;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            z-index: 1;
-        }
-
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: var(--primary-cyan);
-            box-shadow: var(--neon-glow);
-        }
-
-        .input-group-text {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--primary-cyan);
-            position: absolute;
-            z-index: 2;
+        html, body {
+            overflow-y: hidden; /* Prevent vertical scrolling */
+            width: 100%;
             height: 100%;
         }
 
-        .form-label {
+
+        .container {
+            position: relative;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+                        0 10px 10px rgba(0,0,0,0.22);
+        }
+
+        .sign-up, .sign-in {
             position: absolute;
-            top: 50%;
-            left: 2.5rem;
-            transform: translateY(-50%);
-            color: #d1d5db;
-            font-size: 1rem;
-            pointer-events: none;
-            transition: all 0.3s ease;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-up {
+            width: 50%;
+            opacity: 0;
             z-index: 1;
         }
 
-        .form-control:focus ~ .form-label,
-        .form-control:not(:placeholder-shown) ~ .form-label {
-            top: 0;
-            transform: translateY(-100%) scale(0.8);
-            color: var(--primary-cyan);
-            font-size: 0.85rem;
+        .sign-in {
+            width: 50%;
+            z-index: 2;
         }
 
-        /* Submit Button */
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary-cyan), var(--secondary-blue));
-            border: none;
+        form {
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+        form h1 {
             position: relative;
-            overflow: hidden;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1.5px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--neon-glow);
-        }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-        }
-
-        .btn-primary:active::after {
-            width: 200px;
-            height: 200px;
-        }
-
-        /* Switch Link */
-        .switch-link {
-            color: #d1d5db;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-            position: relative;
-            text-decoration: none;
-        }
-
-        .switch-link:hover {
-            color: var(--primary-cyan);
-            text-shadow: var(--neon-glow);
-        }
-
-        .switch-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background: var(--primary-cyan);
-            transition: width 0.3s ease;
-        }
-
-        .switch-link:hover::after {
+            top: 20px;
             width: 100%;
         }
 
-        /* Error Alert */
-        .alert {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid var(--primary-cyan);
-            color: #ff4d4d;
-            border-radius: 8px;
-            animation: fadeIn 0.5s ease-in;
+        h1 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 15px 0 20px;
+        }
+
+        input {
+            background: #eee;
+            padding: 12px 15px;
+            margin: 8px 15px;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+
+        button {
+            color: #fff;
+            background: #100f0f;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 55px;
+            margin: 20px;
+            border-radius: 20px;
+            border: 1px solid #222222;
+            outline: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.90);
+        }
+
+        #signIn, #signUp {
+            background-color: transparent;
+            border: 2px solid #fff;
+        }
+
+        .container.right-panel-active .sign-in {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .sign-up {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
             position: relative;
+            color: #fff;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            background: linear-gradient(to right, #0a0a0a, #2a292a);
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+        .overlay-left h1,
+        .overlay-left p,
+        .overlay-right h1,
+        .overlay-right p {
+        color: #ffffff !important;
+        }       
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(-10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .overlay-left, .overlay-right {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
         }
 
-        .alert-dismissible .btn-close {
-            filter: invert(1);
+        .overlay-left {
+            transform: translateX(-20%);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .auth-card {
-                width: 95% !important;
-                margin: 1rem;
-            }
-            .crypto-particle {
-                font-size: 1rem;
-            }
-            .nav-link {
-                font-size: 1rem;
-            }
-            .form-label {
-                font-size: 0.9rem;
-            }
-            .form-control:focus ~ .form-label,
-            .form-control:not(:placeholder-shown) ~ .form-label {
-                font-size: 0.75rem;
-            }
-            .alert {
-                font-size: 0.9rem;
-                padding: 0.75rem;
-            }
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        .social-container {
+            margin: 20px 0;
+        }
+
+        .social-container a {
+            height: 40px;
+            width: 40px;
+            margin: 0 5px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+        }
+
+        /* Flash messages styling */
+        .flash-container {
+            position: fixed;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .flash-message {
+            padding: 15px 30px;
+            border-radius: 25px;
+            margin: 10px 0;
+            font-size: 14px;
+            max-width: 768px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .flash-danger {
+            background: #0b0b0b;
+            color: white;
+        }
+
+        .flash-success {
+            background: #4CAF50;
+            color: white;
+        }
+        @keyframes fadeOut {
+             from { opacity: 1; }
+             to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
     </style>
-</head>
-<body>
-    <!-- Animated Crypto Particles Background -->
-    <div class="crypto-particles" id="cryptoParticles"></div>
-
-    <!-- Main Auth Container -->
-    <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="auth-card shadow-lg p-4 rounded-4" style="width: 100%; max-width: 450px;">
-            <h2 class="text-center mb-4 text-white font-[Orbitron] text-2xl">
-                <span class="text-[var(--primary-cyan)]" style="text-shadow: var(--neon-glow)">MAAY</span> CRYPTO
-                <i class="bi bi-rocket-takeoff ms-2 text-[var(--secondary-blue)]"></i>
-            </h2>
-
-            <!-- Error Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <!-- Auth Tabs -->
-            <ul class="nav nav-pills mb-4 justify-content-center" id="authTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link {% if active_tab == 'login' %}active{% endif %} h5" id="login-tab" data-bs-toggle="pill" data-bs-target="#login-form" type="button" role="tab">
-                        <i class="bi bi-unlock me-2"></i>Login
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link {% if active_tab == 'register' %}active{% endif %} h5" id="register-tab" data-bs-toggle="pill" data-bs-target="#register-form" type="button" role="tab">
-                        <i class="bi bi-person-plus me-2"></i>Register
-                    </button>
-                </li>
-            </ul>
-
-            <!-- Tab Content -->
-            <div class="tab-content" id="authTabContent">
-                <!-- Login Form -->
-                <div class="tab-pane fade {% if active_tab == 'login' %}show active{% endif %}" id="login-form" role="tabpanel">
-                    <form method="POST" action="{{ url_for('login') }}">
-                        <div class="mb-4 relative input-group">
-                            <span class="input-group-text bg-transparent border-end-0">
-                                <i class="bi bi-person text-[var(--primary-cyan)]"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0" name="username" placeholder=" " required>
-                            <label class="form-label">Username</label>
-                        </div>
-                        <div class="mb-4 relative input-group">
-                            <span class="input-group-text bg-transparent border-end-0">
-                                <i class="bi bi-lock text-[var(--primary-cyan)]"></i>
-                            </span>
-                            <input type="password" class="form-control border-start-0" name="password" placeholder=" " required>
-                            <label class="form-label">Password</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            <span class="login-text">Log in</span>
-                            <i class="bi bi-chevron-right ms-2"></i>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Register Form -->
-                <div class="tab-pane fade {% if active_tab == 'register' %}show active{% endif %}" id="register-form" role="tabpanel">
-                    <form method="POST" action="{{ url_for('register') }}">
-                        <div class="mb-4 relative input-group">
-                            <span class="input-group-text bg-transparent border-end-0">
-                                <i class="bi bi-person-plus text-[var(--primary-cyan)]"></i>
-                            </span>
-                            <input type="text" class="form-control border-start-0" name="username" placeholder=" " required>
-                            <label class="form-label">Username</label>
-                        </div>
-                        <div class="mb-4 relative input-group">
-                            <span class="input-group-text bg-transparent border-end-0">
-                                <i class="bi bi-shield-lock text-[var(--primary-cyan)]"></i>
-                            </span>
-                            <input type="password" class="form-control border-start-0" name="password" placeholder=" " required>
-                            <label class="form-label">Password</label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            <span class="register-text">Create Account</span>
-                            <i class="bi bi-arrow-up-right-square ms-2"></i>
-                        </button>
-                    </form>
-                </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
+        {% endif %}
+    {% endwith %}
 
-            <!-- Switch Form Link -->
-            <div class="text-center mt-4">
-                <a href="#" class="switch-link" onclick="switchTab('{% if active_tab == 'login' %} register-tab{% else %}login-tab{% endif %}')">
-                    {% if active_tab == 'login' %}
-                        New to crypto? Start here
-                    {% else %}
-                        Already have an account? Login
-                    {% endif %}
-                    <i class="bi bi-arrow-repeat ms-2"></i>
-                </a>
+    <div class="container" id="main">
+        <div class="sign-up">
+            <form action="/register" method="POST">
+                <h1>Register</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <p>or fill in your details below</p>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="sign-in">
+            <form action="/login" method="POST">
+                <h1>Sign In</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <p>or use your account</p>                
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <a href="#">Forgot your password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-left">
+                    <h1>Look who’s back!</h1>
+                    <p>Your portfolio misses you. Log in and feed it some fresh gains.</p>
+                    <button id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-right">
+                    <h1>New to the crypto circus?</h1>
+                    <p>Grab a username, pick a password, and join the greatest show on earth.</p>
+                    <button id="signUp">Sign Up</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS (for tabs) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Generate floating crypto particles (100 particles)
-        function createParticles() {
-            const coins = [
-                { icon: 'bi-currency-bitcoin', type: 'btc', color: '#f7931a' },
-                { icon: 'bi-currency-ethereum', type: 'eth', color: '#627eea' },
-                { icon: 'bi-coin', type: 'bnb', color: '#f3ba2f' },
-                { icon: 'bi-cash-coin', type: 'xrp', color: '#00a3ff' },
-                { icon: 'bi-gem', type: 'ada', color: '#3468d1' },
-                { icon: 'bi-shuffle', type: 'sol', color: '#66f9d1' }
-            ];
-
-            const container = document.getElementById('cryptoParticles');
-            
-            for (let i = 0; i < 100; i++) {
-                const particle = document.createElement('i');
-                const randomCoin = coins[Math.floor(Math.random() * coins.length)];
-                const left = Math.random() * 100;
-                const delay = Math.random() * 12;
-                const duration = 8 + Math.random() * 8;
-                const size = 0.8 + Math.random() * 1.4;
-
-                particle.className = `crypto-particle ${randomCoin.icon} ${randomCoin.type}-particle`;
-                particle.style.cssText = `
-                    left: ${left}%;
-                    animation-delay: ${delay}s;
-                    animation-duration: ${duration}s;
-                    font-size: ${size}rem;
-                    color: ${randomCoin.color};
-                `;
-                
-                container.appendChild(particle);
-            }
-        }
-
-        // Add parallax effect for particles
-        document.addEventListener('mousemove', (e) => {
-            const particles = document.querySelectorAll('.crypto-particle');
-            const x = e.clientX / window.innerWidth - 0.5;
-            const y = e.clientY / window.innerHeight - 0.5;
-
-            particles.forEach(particle => {
-                const speed = particle.classList.contains('btc-particle') ? 30 : 20;
-                particle.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-            });
-        });
-
-        // Tab switching with animation
-        function switchTab(tabId) {
-            const tab = document.getElementById(tabId);
-            if (tab) {
-                const card = document.querySelector('.auth-card');
-                card.style.transition = 'transform 0.3s ease';
-                card.style.transform = 'perspective(1000px) rotateY(180deg)';
-                
+        // Auto-hide flash messages after 4 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
                 setTimeout(() => {
-                    new bootstrap.Tab(tab).show();
-                    card.style.transform = 'perspective(1000px) rotateY(0deg)';
-                }, 300);
-            }
-        }
-
-        // Initialize particles and 3D tilt effect
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            VanillaTilt.init(document.querySelector('.auth-card'), {
-                max: 15,
-                speed: 400,
-                glare: true,
-                'max-glare': 0.3
+                    message.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    setTimeout(() => message.remove(), 500);
+                }, 4000);
             });
         });
-
-        // Add hover effect to card
-        const authCard = document.querySelector('.auth-card');
-        authCard.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            authCard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    
+        // Keep existing panel toggle script
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const main = document.getElementById('main');
+    
+        signUpButton.addEventListener('click', () => {
+            main.classList.add("right-panel-active");
         });
-
-        authCard.addEventListener('mouseleave', () => {
-            authCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        signInButton.addEventListener('click', () => {
+            main.classList.remove("right-panel-active");
         });
     </script>
-</body>
-</html>
 {% endblock %}
