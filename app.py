@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import pymysql
 import requests
+from datetime import datetime
 
 pymysql.install_as_MySQLdb()
 
@@ -45,12 +46,60 @@ class Portfolio(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('portfolio', lazy=True))
 
+def get_historical_data(coin_id, days=7):
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
+    params = {'vs_currency': 'usd', 'days': days, 'interval': 'daily'}
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        prices = data['prices']
+        labels = [datetime.utcfromtimestamp(p[0] / 1000).strftime('%Y-%m-%d') for p in prices]
+        values = [round(p[1], 2) for p in prices]
+        return labels, values
+    return [], []
+
 # Routes
 @app.route("/")
 def home():
     if "username" in session:
         return redirect(url_for('dashboard'))
     return render_template("index.html", active_tab="login")
+
+
+@app.route('/graphs')
+def all_graphs():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+
+    # Fetch the logged-in user's portfolio or favorite coins
+    user = User.query.filter_by(username=session['username']).first()
+    coins_in_portfolio = user.portfolio  # Or 'favorites', depending on where you're storing the user's coins
+
+    combined_data = []
+
+    for coin in coins_in_portfolio:
+        coin_id = coin.crypto_name.lower()  # Assuming the coin name matches the CoinGecko ID (e.g., 'bitcoin')
+        labels, prices = get_historical_data(coin_id)
+        if labels and prices:
+            combined_data.append({
+                'name': coin.crypto_name,
+                'labels': labels,
+                'prices': prices
+            })
+
+    # Use the labels from the first coin as x-axis
+    common_labels = combined_data[0]['labels'] if combined_data else []
+
+    return render_template('graphs_list.html', combined_data=combined_data, labels=common_labels)
+
+
+
+
+@app.route('/graphs/<coin_id>')
+def show_graph(coin_id):
+    labels, prices = get_historical_data(coin_id)
+    return render_template('graphs.html', labels=labels, prices=prices, coin_name=coin_id)
 
 @app.route('/login', methods=['POST'])
 def login():

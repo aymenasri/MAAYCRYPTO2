@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<!-- Make sure Bootstrap Icons are loaded in base.html -->
 <style>
     body {
         background-color: #f0f8ff;
@@ -53,6 +54,9 @@
         border-radius: 8px;
         font-size: 0.9rem;
         transition: background-color 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
     }
 
     .btn-custom:hover {
@@ -114,7 +118,9 @@
                     <form method="POST" action="{{ url_for('add_favorite_from_api') }}">
                         <input type="hidden" name="crypto_name" value="{{ coin.name }}">
                         <input type="hidden" name="image_url" value="{{ coin.image }}">
-                        <button type="submit" class="btn-custom" >❤️ Favorite</button>
+                        <button type="submit" class="btn-custom">
+                            ❤️ Favorite
+                        </button>
                     </form>
 
                     <!-- Portfolio Form -->
@@ -122,19 +128,28 @@
                         <input type="hidden" name="crypto_name" value="{{ coin.name }}">
                         <input type="hidden" name="image_url" value="{{ coin.image }}">
                         <input 
-                        type="number" 
-                        name="amount" 
-                        step="0.01" 
-                        min="0" 
-                        placeholder="Amount" 
-                        required 
-                        oninput="this.value = Math.abs(this.value)"
-                    >                        <button type="submit" class="btn-custom">➕ Portfolio</button>
+                            type="number" 
+                            name="amount" 
+                            step="0.01" 
+                            min="0" 
+                            placeholder="Amount" 
+                            required 
+                            oninput="this.value = Math.abs(this.value)"
+                        >
+                        <button type="submit" class="btn-custom">
+                            ➕ Portfolio
+                        </button>
                     </form>
+
+                    <!-- Graph Button -->
+                    <a href="{{ url_for('show_graph', coin_id=coin.id) }}" class="btn-custom" title="View Graph">
+                        <i class="bi bi-graph-up"></i> Graph
+                    </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}

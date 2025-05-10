@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container py-4">
+    <h2 class="text-center mb-4">Top Cryptos Combined Graph</h2>
+    <canvas id="multiLineChart" width="400" height="200"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('multiLineChart').getContext('2d');
+
+    // Prepare datasets for each coin
+    const datasets = [];
+    const yAxes = [];
+
+    {% for data in combined_data %}
+        datasets.push({
+            label: "{{ data.name }}",
+            data: {{ data.prices|tojson }},
+            borderColor: getRandomColor(),  // Random color for each coin
+            fill: false,
+            tension: 0.1
+        });
+
+        yAxes.push({
+            id: "{{ data.name }}-y-axis",
+            type: 'linear',
+            position: 'left',  // You can switch between left and right for each coin
+            scaleLabel: {
+                display: true,
+                labelString: '{{ data.name }} Price (USD)'
+            }
+        });
+    {% endfor %}
+
+    // Chart Configuration
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Price (USD)'
+                    }
+                },
+                // Dynamically add each Y-axis based on coins
+                yAxes: yAxes
+            },
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        }
+    });
+
+    // Function to generate random color for each dataset (coin)
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+</script>
+
+{% endblock %}

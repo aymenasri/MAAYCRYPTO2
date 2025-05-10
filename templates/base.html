@@ -136,10 +136,18 @@
                         Cryptos
                     </a>
                 </li>
+               
+                
                 <li>
                     <a href="{{ url_for('portfolio_page') }}">
                         <i class="bi bi-wallet nav-icon"></i>
                         Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('all_graphs') }}">
+                        <i class="bi bi-graph-up nav-icon"></i>
+                        Portfolio Overview
                     </a>
                 </li>
                 <li>
@@ -148,12 +156,14 @@
                         Favorites
                     </a>
                 </li>
+               
                 <li>
                     <a href="{{ url_for('logout') }}" class="logout-link">
                         <i class="bi bi-box-arrow-right nav-icon"></i>
                         Logout ({{ session['username'] }})
                     </a>
                 </li>
+                
             </ul>
         </nav>
         {% endif %}
